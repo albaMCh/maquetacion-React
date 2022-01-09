@@ -1,0 +1,28 @@
+
+> my-app@0.1.0 start
+> react-scripts start
+
+Starting the development server...
+
+Compiled successfully!
+
+You can now view my-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.18.3:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+assets by path static/ 4.85 MiB
+  assets by path static/media/ 2.08 MiB
+    asset static/media/imagen.6b42c038b3cefef832dd.jpg 1.87 MiB [emitted] [immutable] [from: imagen.jpg] (auxiliary name: main)
+    asset static/media/bootstrap-icons.38c4d2499557ae0379fd.woff 120 KiB [emitted] [immutable] [from: node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff?30af91bf14e37666a085fb8a161ff36d] (auxiliary name: main)
+    asset static/media/bootstrap-icons.2b56e79ae5013246de29.woff2 89.9 KiB [emitted] [immutable] [from: node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2?30af91bf14e37666a085fb8a161ff36d] (auxiliary name: main)
+  assets by path static/js/*.js 2.78 MiB
+    asset static/js/bundle.js 2.77 MiB [emitted] (name: main) 1 related asset
+    asset static/js/node_modules_web-vitals_dist_web-vitals_js.chunk.js 6.88 KiB [emitted] 1 related asset
+asset index.html 1.76 KiB [emitted]
+asset asset-manifest.json 742 bytes [emitted]
+cached modules 2.53 MiB (javascript) 2.08 MiB (asset) 31.4 KiB (runtime) [cached] 171 modules
+webpack 5.65.0 compiled successfully in 4082 ms

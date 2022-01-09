@@ -1,0 +1,64 @@
+body {
+  margin: 60px;
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  line-height: 4em;
+  background-color: #f8f8f9;
+  color: rgb(19, 17, 17);
+}
+
+.page-container {
+  margin: 5rem auto;
+}
+.green {
+  color: #32d4a4;
+}
+
+table#alumnos {
+  width: 100%;
+  border: 1px solid #e6e6ea;
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+}
+table#alumnos th,
+table#alumnos td {
+  text-align: center;
+  padding: 10px;
+}
+
+table#alumnos th {
+  font-weight: bold;
+}
+
+table#alumnos tr td:first-child {
+  font-weight: bold;
+}
+
+caption,
+td,
+th {
+  padding: 0.3em;
+}
+
+table thead tr th {
+  border-bottom: 1px solid #e6e6ea;
+}
+
+table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #e6e6ea;
+}
+h2 label input {
+  height: 40px;
+  width: 200px;
+  border-radius: 6px;
+  border: 1px solid #e6e6ea;
+  background-color: #e6e6ea;
+  margin-left: 15px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  float: left;
+  text-align: left;
+}

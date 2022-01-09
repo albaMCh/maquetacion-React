@@ -1,0 +1,13 @@
+.tag {
+  background-color: #cdcdcd;
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.tag:not(:first-child) {
+  margin-left: 5px;
+}
+
+.tag .close {
+  padding-left: 5px;
+}
