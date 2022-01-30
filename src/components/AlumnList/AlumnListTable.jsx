@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Student } from "../models/alumnClass";
+import React, { useEffect, useState, useMemo } from "react";
+import { useTable } from "react-table";
+
+import { Modal, Button } from "react-bootstrap";
 
 //import $ from 'jquery';
 //import "https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js";
@@ -10,184 +12,376 @@ import "./AlumnListTable.css";
 // var $ = require("jquery");
 // require("datatables.net")(window, $);
 
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+
 import AlumnItem from "./AlumnItem/AlumnItem";
+import TagList from "../TagList/TagList";
+import AlumnCreateCard from "../AlumnCreate/AlumnCreateCard";
 
-const AlumnListTable = () => {
-  const student1 = new Student(
-    "Marta Luque Grande",
-    "Madrid",
-    "España",
-    "634789654",
-    "usuario1@usuario.es",
-    [
+import { AVAILABLE_TAGS } from "../../utils";
+import StudentDataService from "../../services/StudentDataService";
+
+const AlumnListTable = (props) => {
+  const [searchTitle, setSearchTitle] = useState("");
+
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedPresence, setSelectedPresence] = useState("");
+  const [selectedMove, setSelectedMove] = useState("");
+
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {}, []);
+
+  const onChangeSearchTitle = (e) => {
+    const searchTitle = e.target.value;
+    this.setSearchTitle(searchTitle);
+  };
+
+  const onChangeSelectedTags = (tags) => {
+    debugger;
+    setSelectedTags(tags);
+    props.onChangeFilters({
+      tags: tags.join(),
+    });
+  };
+
+  const handleOnChangeCountry = (event) => {
+    const country = event.target.value;
+    onChangeSelectedCountry(country);
+  };
+
+  const onChangeSelectedCountry = (country) => {
+    setSelectedCountry(country);
+    props.onChangeFilters({
+      country: country,
+    });
+  };
+
+  const handleOnChangeCity = (event) => {
+    const city = event.target.value;
+    onChangeSelectedCity(city);
+  };
+
+  const onChangeSelectedCity = (city) => {
+    setSelectedCity(city);
+    props.onChangeFilters({
+      city: city,
+    });
+  };
+
+  const handleOnChangePresence = (event) => {
+    debugger;
+    const presence = event.target.value;
+    onChangeSelectedPresence(presence);
+  };
+
+  const onChangeSelectedPresence = (presence) => {
+    setSelectedPresence(presence);
+    props.onChangeFilters({
+      presence: presence,
+    });
+  };
+
+  const handleOnChangeMove = (event) => {
+    debugger;
+    const move = event.target.value;
+    onChangeSelectedMove(move);
+  };
+
+  const onChangeSelectedMove = (move) => {
+    setSelectedMove(move);
+    props.onChangeFilters({
+      move: move,
+    });
+  };
+
+  const resetFilters = () => {
+    setSelectedTags([]);
+    setSelectedCountry("");
+    setSelectedCity("");
+    setSelectedPresence("");
+    document.getElementById("presence_presencial").checked = false;
+    document.getElementById("presence_remote").checked = false;
+    setSelectedMove("");
+    document.getElementById("move_yes").checked = false;
+    document.getElementById("move_no").checked = false;
+
+    props.onChangeFilters({});
+  };
+
+  const columns = useMemo(
+    () => [
       {
-        key: "angular",
-        label: "Angular",
+        Header: "NOMBRE",
+        accessor: "name",
       },
       {
-        key: "hibernate",
-        label: "Hibernate",
+        Header: "CIUDAD",
+        accessor: "city",
       },
-    ]
-  );
-  const student2 = new Student(
-    "Luis Medina Medina",
-    "Córdoba",
-    "España",
-    "654356279",
-    "usuario2@usuario.es",
-    [
       {
-        key: "java",
-        label: "Java",
+        Header: "PAIS",
+        accessor: "country",
       },
-    ]
-  );
-  const student3 = new Student(
-    "José Perea Ruiz",
-    "Sevilla",
-    "España",
-    "673922904",
-    "usuario3@usuario.es",
-    [
       {
-        key: "java",
-        label: "Java",
+        Header: "TELEFONO",
+        accessor: "phoneNumber",
       },
-    ]
-  );
-  const student4 = new Student(
-    "Laura Monje García",
-    "Barcelona",
-    "España",
-    "693489529",
-    "usuario4@usuario.es",
-    [
       {
-        key: "java",
-        label: "Java",
+        Header: "CORREO ELECTRÓNICO",
+        accessor: "email",
       },
-    ]
-  );
-  const student5 = new Student(
-    "Juan García Murillo",
-    "Madrid",
-    "España",
-    "613056154",
-    "usuario5@usuario.es",
-    [
       {
-        key: "java",
-        label: "Java",
+        Header: "ETIQUETAS",
+        accessor: "tags",
+        Cell: (props) => {
+          const tags = props.row.original.tags.map((tag) => {
+            return tag.key;
+          });
+          return <TagList tags={tags} allowClose={false}></TagList>;
+        },
       },
-    ]
-  );
-  const student6 = new Student(
-    "Jesús Molina Diaz",
-    "Córdoba",
-    "España",
-    "632622779",
-    "usuario6@usuario.es",
-    [
-      {
-        key: "java",
-        label: "Java",
-      },
-    ]
-  );
-  const student7 = new Student(
-    "Jaime Campo Lopez",
-    "Córdoba",
-    "España",
-    "652189404",
-    "usuario7@usuario.es",
-    [
-      {
-        key: "java",
-        label: "Java",
-      },
-    ]
-  );
-  const student8 = new Student(
-    "Lucia García Gandara",
-    "Sevilla",
-    "España",
-    "661756029",
-    "usuario8@usuario.es",
-    [
-      {
-        key: "java",
-        label: "Java",
-      },
-    ]
-  );
-  const student9 = new Student(
-    "Paula Pizarro Gomez",
-    "Sevilla",
-    "España",
-    "691322654",
-    "usuario9@usuario.es",
-    [
-      {
-        key: "java",
-        label: "Java",
-      },
-    ]
+    ],
+    []
   );
 
-  const [students, setSudent] = useState([
-    student1,
-    student2,
-    student3,
-    student4,
-    student5,
-    student6,
-    student7,
-    student8,
-    student9,
-    student9,
-  ]);
+  const handleShowModal = () => {
+    setShow(true);
+  };
 
-  const sortTable = ({ n }) => {};
+  const handleCloseModal = () => {
+    setShow(false);
+  };
 
-  return (
-    <div>
-      <table id="alumnos">
-        <thead>
-          <tr>
-            <th scope="col" onClick={() => sortTable(0)}>
-              NOMBRE <i className="bi bi-arrow-down-up"></i>
-            </th>
-            <th scope="col" onClick={() => sortTable(1)}>
-              CIUDAD <i className="bi bi-arrow-down-up"></i>
-            </th>
-            <th scope="col" onClick={() => sortTable(2)}>
-              PAÍS <i className="bi bi-arrow-down-up"></i>
-            </th>
-            <th scope="col" onClick={() => sortTable(3)}>
-              TELÉFONO
-            </th>
-            <th scope="col" onClick={() => sortTable(4)}>
-              CORREO ELECTRÓNICO <i className="bi bi-arrow-down-up"></i>
-            </th>
-            <th scope="col" onClick={() => sortTable(5)}>
-              ETIQUETAS <i className="bi bi-arrow-down-up"></i>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((student, index) => {
-            return (
-              <AlumnItem
-                key={index}
-                student={student}
-                allowClose={false}
-              ></AlumnItem>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data: props.students,
+    });
+
+  const headerStyle = {
+    display: "inline",
+  };
+  const searchInputStyle = {
+    marginLeft: "15px",
+    height: "30px",
+    width: "200px",
+    borderRadius: "4px",
+    fontSize: "12px",
+    display: "inline",
+  };
+
+  const addAlumnStyle = {
+    float: "right",
+    padding: "7px",
+    margin: "10px 0",
+    fontSize: "12px",
+    borderRadius: "4px",
+  };
+
+  if (props.students.length > 0) {
+    return (
+      <div>
+        <div className="list row">
+          <div className="col-md-8">
+            <div className="mb-3">
+              <h2 style={headerStyle}>
+                Alumnos
+                <input
+                  type="text"
+                  id="input-search"
+                  className="form-control"
+                  placeholder="Buscar por Nombre, Email o Palabra clave..."
+                  value={searchTitle}
+                  onChange={onChangeSearchTitle}
+                  style={searchInputStyle}
+                />
+                <button onClick={handleShowModal} style={addAlumnStyle}>
+                  + Añadir alumno
+                </button>
+              </h2>
+            </div>
+            <table
+              id="alumnos"
+              className="table table-striped table-bordered"
+              {...getTableProps()}
+            >
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <AlumnItem
+                      key={row.id}
+                      allowClose={false}
+                      row={row}
+                    ></AlumnItem>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="col-md-4">
+            <div id="filters-panel">
+              <h2>
+                Filtros de búsqueda
+                <button onClick={resetFilters}>
+                  <i className="bi-trash" style={{ fontSize: "20px" }}></i>
+                </button>
+              </h2>
+              <form>
+                <div className="full-width">
+                  <label htmlFor="tags">Etiquetas</label>
+                  <DropdownMultiselect
+                    id="tags"
+                    placeholder="Escribe para buscar..."
+                    options={AVAILABLE_TAGS}
+                    selected={selectedTags}
+                    name="available-tags"
+                    handleOnChange={(selected) => {
+                      debugger;
+                      onChangeSelectedTags(selected);
+                    }}
+                  />
+                </div>
+                <div id="tag-list" className="full-width">
+                  <TagList
+                    id="tag-list"
+                    tags={selectedTags}
+                    allowClose={true}
+                  ></TagList>
+                </div>
+                <div className="block">
+                  <label htmlFor="country">País</label>
+
+                  <select
+                    id="country"
+                    name="pais"
+                    value={selectedCountry}
+                    onChange={handleOnChangeCountry}
+                  >
+                    <option value="">Elige Pais</option>
+                    <option value="AF">Afganistán</option>
+                    <option value="AL">Albania</option>
+                    <option value="DE">Alemania</option>
+                    <option value="ES">España</option>
+                  </select>
+                </div>
+                <div className="block">
+                  <label htmlFor="city">Ciudad</label>
+
+                  <select
+                    id="city"
+                    name="city"
+                    value={selectedCity}
+                    onChange={handleOnChangeCity}
+                  >
+                    <option value="">Elige Provincia</option>
+                    <option value="Álava/Araba">Álava/Araba</option>
+                    <option value="Albacete">Albacete</option>
+                    <option value="Alicante">Alicante</option>
+                    <option value="Almería">Almería</option>
+                  </select>
+                </div>
+                <div className="block">
+                  <label>Presencialidad / a distancia</label>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="presence"
+                      value="SI"
+                      id="presence_presencial"
+                      onChange={handleOnChangePresence}
+                      checked={selectedPresence === "SI"}
+                    ></input>
+                    <label
+                      className="form-check-label"
+                      htmlFor="presence_presencial"
+                    >
+                      Presencial
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="presence"
+                      value="NO"
+                      id="presence_remote"
+                      onChange={handleOnChangePresence}
+                      checked={selectedPresence === "NO"}
+                    ></input>
+                    <label
+                      className="form-check-label"
+                      htmlFor="presence_remote"
+                    >
+                      En remoto
+                    </label>
+                  </div>
+                </div>
+                <div className="block">
+                  <label>Posibilidad traslado</label>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="move"
+                      value="true"
+                      id="move_yes"
+                      onChange={handleOnChangeMove}
+                      checked={selectedMove === "true"}
+                    ></input>
+                    <label className="form-check-label" htmlFor="move_yes">
+                      Sí
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="move"
+                      value="false"
+                      id="move_no"
+                      onChange={handleOnChangeMove}
+                      checked={selectedMove === "false"}
+                    ></input>
+                    <label className="form-check-label" htmlFor="move_no">
+                      No
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <Modal show={show} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Nuevo Alumno</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AlumnCreateCard
+              handleCloseModal={handleCloseModal}
+            ></AlumnCreateCard>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  } else {
+    return <div>Cargando...</div>;
+  }
 };
+
 export default AlumnListTable;

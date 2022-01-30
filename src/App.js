@@ -1,6 +1,6 @@
 //import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Login from "./components/Login";
 import AlumnDetail from "./components/AlumnDetail";
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Login />} />
         <Route exact path="/list" element={<AlumnList />} />
-        <Route exact path="/create-student" element={<AlumnDetail />} />
+        <Route exact path="/students/:id" element={<AlumnDetail />} />
       </Routes>
     </Router>
   );

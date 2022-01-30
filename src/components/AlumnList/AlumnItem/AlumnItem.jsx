@@ -2,11 +2,29 @@ import React from "react";
 
 import "./AlumnItem.css";
 
-import TagList from "../../TagList/TagList";
+import { useNavigate } from "react-router-dom";
 
-const Alumnitem = ({ student, allowClose }) => {
+const Alumnitem = ({ row, allowClose, onClickStudentRow }) => {
+  const history = useNavigate();
+
+  const goToStudentDetail = (row) => {
+    debugger;
+    history("/students/" + row.original.id);
+  };
+
   return (
-    <tr>
+    <tr
+      {...row.getRowProps()}
+      key={row.id}
+      onClick={() => goToStudentDetail(row)}
+    >
+      {row.cells.map((cell) => {
+        return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+      })}
+    </tr>
+
+    /* <tr>
+      <td {...student.getCellProps()}>{student.render("Student")}</td>
       <td>{student.name}</td>
       <td>{student.city}</td>
       <td>{student.country}</td>
@@ -15,7 +33,7 @@ const Alumnitem = ({ student, allowClose }) => {
       <td>
         <TagList tags={student.tags} allowClose={false}></TagList>
       </td>
-    </tr>
+    </tr> */
   );
 };
 

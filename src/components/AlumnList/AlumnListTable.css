@@ -46,6 +46,26 @@ table thead tr th {
   border-bottom: 1px solid #e6e6ea;
 }
 
+table thead tr th:not(:first-child) {
+  border-left: 0;
+}
+
+table thead tr th:not(:last-child) {
+  border-right: 0;
+}
+
+table thead tr th {
+  border-bottom: 1px solid #e6e6ea;
+}
+
+table tbody tr td:not(:first-child) {
+  border-left: 0;
+}
+
+table tbody tr td:not(:last-child) {
+  border-right: 0;
+}
+
 table tbody tr:not(:last-child) td {
   border-bottom: 1px solid #e6e6ea;
 }
@@ -61,4 +81,54 @@ h2 label input {
 .dataTables_wrapper .dataTables_filter {
   float: left;
   text-align: left;
+}
+
+#filters-panel {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 30px;
+  border: 1px solid #f8f8f9;
+}
+
+#filters-panel .dropdown-toggle {
+  border-radius: 10px;
+}
+
+#filters-panel form > div > label {
+  font-weight: bold;
+}
+
+#filters-panel select {
+  width: 100%;
+  margin-top: 10px;
+  height: 30px;
+  border-radius: 7px;
+  background-color: #f8f8f9;
+  border: 1px solid #f8f8f9;
+}
+
+#filters-panel div.block {
+  margin-top: 15px;
+}
+
+#filters-panel div.form-check {
+  margin-top: 15px;
+}
+
+#filters-panel h2 {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+#filters-panel h2 button {
+  border: none;
+  float: right;
+}
+
+#filters-panel h2 button i {
+  color: #32d4a4;
+}
+
+#filters-panel tbody tr:hover {
+  cursor: pointer;
 }

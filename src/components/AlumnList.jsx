@@ -1,28 +1,65 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import AlumnListTable from "./AlumnList/AlumnListTable.jsx";
 
-const AlumnList = () => {
-  const searchInputStyle = {
-    marginLeft: "15px",
-    height: "30px",
-    width: "200px",
-    borderRadius: "4px",
-    fontSize: "12px",
+import StudentDataService from "../services/StudentDataService.js";
+
+import { Student } from "../models/alumnClass";
+
+const AlumnList = (props) => {
+  const [alumnList, setAlumnList] = useState([]);
+  const [filters, setFilters] = useState({});
+
+  useEffect(() => {
+    StudentDataService.getAll().then((data) => {
+      this.setState({
+        alumnList: data,
+      });
+    });
+  }, []);
+
+  const retrieveStudents = (newFilters) => {
+    let updatedFilters;
+
+    if (newFilters === null) {
+      updatedFilters = {};
+    } else {
+      updatedFilters = {
+        ...filters,
+        ...newFilters,
+      };
+    }
+
+    setFilters(updatedFilters);
+
+    debugger;
+
+    StudentDataService.getAll(updatedFilters)
+      .then((data) => {
+        setAlumnList(data);
+      })
+      .catch(() => {
+        const student2 = new Student(
+          "Luis Medina Medina",
+          "Córdoba",
+          "España",
+          "654356279",
+          "usuario2@usuario.es",
+          [
+            {
+              key: "java",
+              label: "Java",
+            },
+          ]
+        );
+
+        const data = [student2];
+        setAlumnList(data);
+      });
   };
 
-  const addAlumnStyle = {
-    float: "right",
-    padding: "7px",
-    margin: "10px 0",
-    fontSize: "12px",
-    borderRadius: "4px",
-  };
   const studentStyle = {
     fontSize: "20px",
-  };
-  const headerStyle = {
-    display: "inline",
   };
 
   return (
@@ -38,19 +75,11 @@ const AlumnList = () => {
         </span>
       </h2>
 
-      <h2 style={headerStyle}>
-        Alumnos
-        <input
-          style={searchInputStyle}
-          placeholder="Buscar por Nombre, Email o Palabra clave..."
-        ></input>
-        <button type="submit" style={addAlumnStyle}>
-          + Añadir alumnos{" "}
-        </button>
-      </h2>
-
       <div className="page-container">
-        <AlumnListTable></AlumnListTable>
+        <AlumnListTable
+          students={alumnList}
+          onChangeFilters={retrieveStudents}
+        ></AlumnListTable>
       </div>
     </div>
   );

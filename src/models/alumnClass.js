@@ -6,11 +6,11 @@ export class Student {
   email = "";
   tags = [];
 
-  constructor(name, city, country, phone, email, tags) {
+  constructor(name, city, country, phoneNumber, email, tags) {
     this.name = name;
     this.city = city;
     this.country = country;
-    this.phone = phone;
+    this.phoneNumber = phoneNumber;
     this.email = email;
     this.tags = tags;
   }
