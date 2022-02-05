@@ -259,12 +259,12 @@ const AlumnCreateCard = (props) => {
                   Subir documento PDF
                 </button>
               </div>
-              {/*<div className="full-width">
+              <div className="full-width">
                 <label htmlFor="tags">Etiquetas</label>
                 <DropdownMultiselect
                   placeholder="Escribe para buscar..."
                   options={availableTags}
-                  selected={currentAlumn.tags.trim().split(",")}
+                  selected={currentAlumn.tags}
                   name="available-tags"
                   handleOnChange={(selected) => {
                     debugger;
@@ -275,11 +275,11 @@ const AlumnCreateCard = (props) => {
                 <div id="tag-list" className="full-width">
                   <TagList
                     id="tag-list"
-                    tags={currentAlumn.tags.trim().split(",")}
+                    tags={currentAlumn.tags}
                     allowClose={true}
                   ></TagList>
                 </div>
-              )} */}
+              )}
             </div>
           </div>
           <div id="modal-buttons">

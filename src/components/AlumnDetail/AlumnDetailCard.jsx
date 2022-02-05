@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import PDFViewer from 'pdf-viewer-reactjs'
+
+
 import "./AlumnDetailCard.css";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 
@@ -12,28 +15,40 @@ import { AVAILABLE_TAGS } from "../../utils";
 
 const AlumnDetailCard = (props) => {
   const [currentAlumn, setCurrentAlumn] = useState({
-    tags: "",
+    name: "",
+    city: "",
+    country: "",
+    phoneNumber: "",
+    email: "",
+    tags: [],
   });
+
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
 
+   const ExamplePDFViewer = () => {
+    return (
+        <PDFViewer
+            document={{
+                url: 'https://',
+            }}
+        />
+    )
+  }
   useEffect(() => {
     StudentDataService.get(id)
-      .then((response) => response.json())
       .then((data) => {
         setCurrentAlumn(data);
-      });
-    /* .catch(() =>
-        setCurrentAlumn({
-          name: "Pepito",
-          tags: "angular,hibernate",
-        })
-      )*/
+      })
+      .finally(() => setLoading(false));
   }, [id]);
 
   const availableTags = AVAILABLE_TAGS;
 
-  if (currentAlumn.name) {
+  if (loading) {
+    return <div>Cargando...</div>;
+  } else if (currentAlumn.name) {
     return (
       <div>
         <div className="card">
@@ -63,6 +78,7 @@ const AlumnDetailCard = (props) => {
                   id="full-name"
                   placeholder="Nombre del alumno"
                   value={currentAlumn.name}
+                  readOnly
                 />
               </div>
               <div className="block">
@@ -74,6 +90,7 @@ const AlumnDetailCard = (props) => {
                   id="phone-number"
                   placeholder="Número de telefono"
                   value={currentAlumn.phoneNumber}
+                  readOnly
                 />
               </div>
               <div className="block">
@@ -85,13 +102,19 @@ const AlumnDetailCard = (props) => {
                   id="email"
                   placeholder="email"
                   value={currentAlumn.email}
+                  readOnly
                 />
               </div>
 
               <div className="block">
                 <label htmlFor="country">País</label>
 
-                <select id="country" name="pais" value={currentAlumn.country}>
+                <select
+                  id="country"
+                  name="pais"
+                  value={currentAlumn.country}
+                  disabled
+                >
                   <option value="">Elige Pais</option>
                   <option value="AF">Afganistán</option>
                   <option value="AL">Albania</option>
@@ -228,31 +251,6 @@ const AlumnDetailCard = (props) => {
                   <option value="LI">Liechtenstein</option>
                   <option value="LT">Lituania</option>
                   <option value="LU">Luxemburgo</option>
-                  <option value="MK">
-                    Macedonia, Ex-República Yugoslava de
-                  </option>
-                  <option value="MG">Madagascar</option>
-                  <option value="MY">Malasia</option>
-                  <option value="MW">Malawi</option>
-                  <option value="MV">Maldivas</option>
-                  <option value="ML">Malí</option>
-                  <option value="MT">Malta</option>
-                  <option value="MA">Marruecos</option>
-                  <option value="MQ">Martinica</option>
-                  <option value="MU">Mauricio</option>
-                  <option value="MR">Mauritania</option>
-                  <option value="YT">Mayotte</option>
-                  <option value="MX">México</option>
-                  <option value="FM">Micronesia</option>
-                  <option value="MD">Moldavia</option>
-                  <option value="MC">Mónaco</option>
-                  <option value="MN">Mongolia</option>
-                  <option value="MS">Montserrat</option>
-                  <option value="MZ">Mozambique</option>
-                  <option value="NA">Namibia</option>
-                  <option value="NR">Nauru</option>
-                  <option value="NP">Nepal</option>
-                  <option value="NI">Nicaragua</option>
                   <option value="NE">Níger</option>
                   <option value="NG">Nigeria</option>
                   <option value="NU">Niue</option>
@@ -291,7 +289,7 @@ const AlumnDetailCard = (props) => {
 
               <div className="block">
                 <label htmlFor="town">Ciudad</label>
-                <select required name="Ciudad" value={currentAlumn.city}>
+                <select name="Ciudad" value={currentAlumn.city} disabled>
                   <option value="">Elige Provincia</option>
                   <option value="Álava/Araba">Álava/Araba</option>
                   <option value="Albacete">Albacete</option>
@@ -350,14 +348,18 @@ const AlumnDetailCard = (props) => {
 
               <div className="block">
                 <label htmlFor="transfer">Traslado</label>
-                <select name="Traslado" value={currentAlumn.move}>
+                <select name="Traslado" value={currentAlumn.move} disabled>
                   <option value="true">Sí</option>
                   <option value="false">No</option>
                 </select>
               </div>
               <div className="block">
                 <label htmlFor="presence">Presencialidad</label>
-                <select name="Presencialidad" value={currentAlumn.presence}>
+                <select
+                  name="Presencialidad"
+                  value={currentAlumn.presence}
+                  disabled
+                >
                   <option value="Presencial">Presencial</option>
                   <option value="En remoto">En remoto</option>
                 </select>
@@ -382,37 +384,25 @@ const AlumnDetailCard = (props) => {
                 <DropdownMultiselect
                   placeholder="Escribe para buscar..."
                   options={availableTags}
-                  selected={currentAlumn.tags.trim().split(",")}
+                  selected={currentAlumn.tags}
                   name="available-tags"
-                  handleOnChange={(selected) => {
-                    debugger;
-                  }}
+                  disabled
                 />
               </div>
               <div id="tag-list" className="full-width">
                 <TagList
                   id="tag-list"
-                  tags={currentAlumn.tags.trim().split(",")}
+                  tags={currentAlumn.tags}
                   allowClose={true}
                 ></TagList>
               </div>
-
-              {/* <TagList props={tags}>
-              
-            </TagList> */}
-
-              {/* {props.tags.map((tag) => {
-              return (
-                <TagItem props={name: tag.name }></TagItem>
-              )
-            }} */}
             </form>
           </section>
         </div>
       </div>
     );
   } else {
-    return <div>Cargando...</div>;
+    return <div>HUbo un error al cargar la página</div>;
   }
 };
 

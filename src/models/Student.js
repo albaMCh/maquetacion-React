@@ -12,6 +12,13 @@ export class Student {
     this.country = country;
     this.phoneNumber = phoneNumber;
     this.email = email;
-    this.tags = tags;
+
+    if (tags && typeof tags !== "string") {
+      throw new Error(
+        "tags property must be a string with values separated by commas"
+      );
+    }
+
+    this.tags = tags.split(",");
   }
 }

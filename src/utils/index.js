@@ -28,3 +28,7 @@ export const AVAILABLE_TAGS = [
 ];
 
 export const API_URL = "http://localhost:9033/api";
+
+export const getTagObjectFromKey = (key) => {
+  return AVAILABLE_TAGS.find((tag) => tag.key === key);
+};

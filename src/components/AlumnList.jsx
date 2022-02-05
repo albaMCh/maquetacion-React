@@ -4,7 +4,7 @@ import AlumnListTable from "./AlumnList/AlumnListTable.jsx";
 
 import StudentDataService from "../services/StudentDataService.js";
 
-import { Student } from "../models/alumnClass";
+import { Student } from "../models/Student";
 
 const AlumnList = (props) => {
   const [alumnList, setAlumnList] = useState([]);
@@ -12,9 +12,7 @@ const AlumnList = (props) => {
 
   useEffect(() => {
     StudentDataService.getAll().then((data) => {
-      this.setState({
-        alumnList: data,
-      });
+      setAlumnList(data);
     });
   }, []);
 
