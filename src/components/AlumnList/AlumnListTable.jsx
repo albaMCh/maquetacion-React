@@ -19,7 +19,6 @@ import TagList from "../TagList/TagList";
 import AlumnCreateCard from "../AlumnCreate/AlumnCreateCard";
 
 import { AVAILABLE_TAGS } from "../../utils";
-import StudentDataService from "../../services/StudentDataService";
 
 const AlumnListTable = (props) => {
   const [searchTitle, setSearchTitle] = useState("");
@@ -137,9 +136,7 @@ const AlumnListTable = (props) => {
         Header: "ETIQUETAS",
         accessor: "tags",
         Cell: (props) => {
-          const tags = props.row.original.tags.map((tag) => {
-            return tag.key;
-          });
+          const tags = props.row.original.tags;
           return <TagList tags={tags} allowClose={false}></TagList>;
         },
       },
@@ -181,207 +178,206 @@ const AlumnListTable = (props) => {
     borderRadius: "4px",
   };
 
-  if (props.students.length > 0) {
-    return (
-      <div>
-        <div className="list row">
-          <div className="col-md-8">
-            <div className="mb-3">
-              <h2 style={headerStyle}>
-                Alumnos
-                <input
-                  type="text"
-                  id="input-search"
-                  className="form-control"
-                  placeholder="Buscar por Nombre, Email o Palabra clave..."
-                  value={searchTitle}
-                  onChange={onChangeSearchTitle}
-                  style={searchInputStyle}
-                />
-                <button onClick={handleShowModal} style={addAlumnStyle}>
-                  + Añadir alumno
-                </button>
-              </h2>
-            </div>
-            <table
-              id="alumnos"
-              className="table table-striped table-bordered"
-              {...getTableProps()}
-            >
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th {...column.getHeaderProps()}>
-                        {column.render("Header")}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <AlumnItem
-                      key={row.id}
-                      allowClose={false}
-                      row={row}
-                    ></AlumnItem>
-                  );
-                })}
-              </tbody>
-            </table>
+  return (
+    <div>
+      <div className="list row">
+        <div className="col-md-8">
+          <div className="mb-3">
+            <h2 style={headerStyle}>
+              Alumnos
+              <input
+                type="text"
+                id="input-search"
+                className="form-control"
+                placeholder="Buscar por Nombre, Email o Palabra clave..."
+                value={searchTitle}
+                onChange={onChangeSearchTitle}
+                style={searchInputStyle}
+              />
+              <button onClick={handleShowModal} style={addAlumnStyle}>
+                + Añadir alumno
+              </button>
+            </h2>
           </div>
-          <div className="col-md-4">
-            <div id="filters-panel">
-              <h2>
-                Filtros de búsqueda
-                <button onClick={resetFilters}>
-                  <i className="bi-trash" style={{ fontSize: "20px" }}></i>
-                </button>
-              </h2>
-              <form>
-                <div className="full-width">
-                  <label htmlFor="tags">Etiquetas</label>
-                  <DropdownMultiselect
-                    id="tags"
-                    placeholder="Escribe para buscar..."
-                    options={AVAILABLE_TAGS}
-                    selected={selectedTags}
-                    name="available-tags"
-                    handleOnChange={(selected) => {
-                      debugger;
-                      onChangeSelectedTags(selected);
-                    }}
-                  />
-                </div>
-                <div id="tag-list" className="full-width">
-                  <TagList
-                    id="tag-list"
-                    tags={selectedTags}
-                    allowClose={true}
-                  ></TagList>
-                </div>
-                <div className="block">
-                  <label htmlFor="country">País</label>
+          <table
+            id="alumnos"
+            className="table table-striped table-bordered"
+            {...getTableProps()}
+          >
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <AlumnItem
+                    key={row.id}
+                    allowClose={false}
+                    row={row}
+                  ></AlumnItem>
+                );
+              })}
+              {rows.length === 0 ? (
+                <tr>
+                  <td colSpan={6}>No se encontraron resultados</td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+        <div className="col-md-4">
+          <div id="filters-panel">
+            <h2>
+              Filtros de búsqueda
+              <button onClick={resetFilters}>
+                <i className="bi-trash" style={{ fontSize: "20px" }}></i>
+              </button>
+            </h2>
+            SelectedTags: {selectedTags}
+            <form>
+              <div className="full-width">
+                <label htmlFor="tags">Etiquetas</label>
+                <DropdownMultiselect
+                  id="tags"
+                  placeholder="Escribe para buscar..."
+                  options={AVAILABLE_TAGS}
+                  selected={selectedTags}
+                  name="available-tags"
+                  handleOnChange={(selected) => {
+                    debugger;
+                    onChangeSelectedTags(selected);
+                  }}
+                />
+              </div>
+              <div id="tag-list" className="full-width">
+                <TagList
+                  id="tag-list"
+                  tags={selectedTags}
+                  allowClose={true}
+                ></TagList>
+              </div>
+              <div className="block">
+                <label htmlFor="country">País</label>
 
-                  <select
-                    id="country"
-                    name="pais"
-                    value={selectedCountry}
-                    onChange={handleOnChangeCountry}
-                  >
-                    <option value="">Elige Pais</option>
-                    <option value="AF">Afganistán</option>
-                    <option value="AL">Albania</option>
-                    <option value="DE">Alemania</option>
-                    <option value="ES">España</option>
-                  </select>
-                </div>
-                <div className="block">
-                  <label htmlFor="city">Ciudad</label>
+                <select
+                  id="country"
+                  name="pais"
+                  value={selectedCountry}
+                  onChange={handleOnChangeCountry}
+                >
+                  <option value="">Elige Pais</option>
+                  <option value="AF">Afganistán</option>
+                  <option value="AL">Albania</option>
+                  <option value="DE">Alemania</option>
+                  <option value="ES">España</option>
+                </select>
+              </div>
+              <div className="block">
+                <label htmlFor="city">Ciudad</label>
 
-                  <select
-                    id="city"
-                    name="city"
-                    value={selectedCity}
-                    onChange={handleOnChangeCity}
+                <select
+                  id="city"
+                  name="city"
+                  value={selectedCity}
+                  onChange={handleOnChangeCity}
+                >
+                  <option value="">Elige Provincia</option>
+                  <option value="Álava/Araba">Álava/Araba</option>
+                  <option value="Albacete">Albacete</option>
+                  <option value="Alicante">Alicante</option>
+                  <option value="Almería">Almería</option>
+                </select>
+              </div>
+              <div className="block">
+                <label>Presencialidad / a distancia</label>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="presence"
+                    value="SI"
+                    id="presence_presencial"
+                    onChange={handleOnChangePresence}
+                    checked={selectedPresence === "SI"}
+                  ></input>
+                  <label
+                    className="form-check-label"
+                    htmlFor="presence_presencial"
                   >
-                    <option value="">Elige Provincia</option>
-                    <option value="Álava/Araba">Álava/Araba</option>
-                    <option value="Albacete">Albacete</option>
-                    <option value="Alicante">Alicante</option>
-                    <option value="Almería">Almería</option>
-                  </select>
+                    Presencial
+                  </label>
                 </div>
-                <div className="block">
-                  <label>Presencialidad / a distancia</label>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="presence"
-                      value="SI"
-                      id="presence_presencial"
-                      onChange={handleOnChangePresence}
-                      checked={selectedPresence === "SI"}
-                    ></input>
-                    <label
-                      className="form-check-label"
-                      htmlFor="presence_presencial"
-                    >
-                      Presencial
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="presence"
-                      value="NO"
-                      id="presence_remote"
-                      onChange={handleOnChangePresence}
-                      checked={selectedPresence === "NO"}
-                    ></input>
-                    <label
-                      className="form-check-label"
-                      htmlFor="presence_remote"
-                    >
-                      En remoto
-                    </label>
-                  </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="presence"
+                    value="NO"
+                    id="presence_remote"
+                    onChange={handleOnChangePresence}
+                    checked={selectedPresence === "NO"}
+                  ></input>
+                  <label className="form-check-label" htmlFor="presence_remote">
+                    En remoto
+                  </label>
                 </div>
-                <div className="block">
-                  <label>Posibilidad traslado</label>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="move"
-                      value="true"
-                      id="move_yes"
-                      onChange={handleOnChangeMove}
-                      checked={selectedMove === "true"}
-                    ></input>
-                    <label className="form-check-label" htmlFor="move_yes">
-                      Sí
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="move"
-                      value="false"
-                      id="move_no"
-                      onChange={handleOnChangeMove}
-                      checked={selectedMove === "false"}
-                    ></input>
-                    <label className="form-check-label" htmlFor="move_no">
-                      No
-                    </label>
-                  </div>
+              </div>
+              <div className="block">
+                <label>Posibilidad traslado</label>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="move"
+                    value="true"
+                    id="move_yes"
+                    onChange={handleOnChangeMove}
+                    checked={selectedMove === "true"}
+                  ></input>
+                  <label className="form-check-label" htmlFor="move_yes">
+                    Sí
+                  </label>
                 </div>
-              </form>
-            </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="move"
+                    value="false"
+                    id="move_no"
+                    onChange={handleOnChangeMove}
+                    checked={selectedMove === "false"}
+                  ></input>
+                  <label className="form-check-label" htmlFor="move_no">
+                    No
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-        <Modal show={show} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Nuevo Alumno</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <AlumnCreateCard
-              handleCloseModal={handleCloseModal}
-            ></AlumnCreateCard>
-          </Modal.Body>
-        </Modal>
       </div>
-    );
-  } else {
-    return <div>Cargando...</div>;
-  }
+      <Modal show={show} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Nuevo Alumno</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AlumnCreateCard
+            handleCloseModal={handleCloseModal}
+          ></AlumnCreateCard>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
 };
 
 export default AlumnListTable;
