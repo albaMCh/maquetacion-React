@@ -1,17 +1,26 @@
 export class Student {
-  name = "";
-  city = "";
-  country = "";
-  phoneNumber = "";
-  email = "";
-  tags = [];
+  constructor({
+    id,
+    name,
+    city,
+    country,
+    phoneNumber,
+    email,
+    tags,
+    pdfPath,
+    pathImage,
+  }) {
+    this.id = id || null;
+    this.name = name || "";
+    this.city = city || "";
+    this.country = country || "";
+    this.phoneNumber = phoneNumber || "";
+    this.email = email || "";
 
-  constructor(name, city, country, phoneNumber, email, tags) {
-    this.name = name;
-    this.city = city;
-    this.country = country;
-    this.phoneNumber = phoneNumber;
-    this.email = email;
+    // TODO: Revisar nombre parámetro pdfPath en API
+    this.pdfPath = pdfPath || "";
+
+    this.pathImage = pathImage || "";
 
     if (tags && typeof tags !== "string") {
       throw new Error(
@@ -19,6 +28,6 @@ export class Student {
       );
     }
 
-    this.tags = tags.split(",");
+    this.tags = (tags || []) && tags.split(",");
   }
 }

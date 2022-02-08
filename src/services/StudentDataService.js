@@ -7,7 +7,7 @@ class StudentDataService {
   getAll(queryParams) {
     return (
       axios
-        .get(API_URL + "/student", {
+        .get(API_URL + "/students", {
           params: queryParams,
         })
         .then((response) => {
@@ -19,7 +19,6 @@ class StudentDataService {
         .then((data) => {
           data = data.filter((item) => {
             let condition = true;
-            debugger;
 
             if (!queryParams) return item;
             if (queryParams.tags)
@@ -53,6 +52,10 @@ class StudentDataService {
 
   create(body) {
     return axios.post(API_URL + "/students", body);
+  }
+
+  uploadCV() {
+    return axios.post(API_URL + "/files");
   }
 }
 

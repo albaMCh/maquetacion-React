@@ -30,8 +30,6 @@ const AlumnList = (props) => {
 
     setFilters(updatedFilters);
 
-    debugger;
-
     StudentDataService.getAll(updatedFilters)
       .then((data) => {
         setAlumnList(data);

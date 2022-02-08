@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 //import $ from 'jquery';
 //import "https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js";
@@ -31,15 +31,96 @@ const AlumnListTable = (props) => {
 
   const [show, setShow] = useState(false);
 
+  const columns = useMemo(
+    () => [
+      {
+        Header: "NOMBRE",
+        accessor: "name",
+      },
+      {
+        Header: "CIUDAD",
+        accessor: "city",
+      },
+      {
+        Header: "PAIS",
+        accessor: "country",
+      },
+      {
+        Header: "TELEFONO",
+        accessor: "phoneNumber",
+        disableSortBy: true,
+      },
+      {
+        Header: "CORREO ELECTRÓNICO",
+        accessor: "email",
+      },
+      {
+        Header: "ETIQUETAS",
+        accessor: "tags",
+        disableSortBy: true,
+        Cell: (props) => {
+          const tags = props.row.original.tags;
+          return <TagList tags={tags} allowClose={false}></TagList>;
+        },
+      },
+    ],
+    []
+  );
+
+  const showSortInfo = (column) => {
+    if (column.canSort) {
+      const res = (
+        <span>
+          {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
+          <i class="bi bi-chevron-expand"></i>
+        </span>
+      );
+      return res;
+    }
+  };
+
+  const sortColumn = (column) => {
+    let sortType;
+
+    if (!column.isSorted || column.isSortedDesc) {
+      sortType = "asc";
+    } else {
+      sortType = "desc";
+    }
+
+    props.onChangeFilters({
+      sortProperty: column.id,
+      sortType,
+    });
+  };
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable(
+      {
+        columns,
+        data: props.students,
+        sortColumn,
+        manualSortBy: true,
+        manualPagination: true,
+      },
+      useSortBy
+    );
+
   useEffect(() => {}, []);
 
-  const onChangeSearchTitle = (e) => {
-    const searchTitle = e.target.value;
-    this.setSearchTitle(searchTitle);
+  const handleOnChangeSearchTitle = (event) => {
+    const search = event.target.value;
+    onChangeSearchTitle(search);
+  };
+
+  const onChangeSearchTitle = (search) => {
+    setSearchTitle(search);
+    props.onChangeFilters({
+      search,
+    });
   };
 
   const onChangeSelectedTags = (tags) => {
-    debugger;
     setSelectedTags(tags);
     props.onChangeFilters({
       tags: tags.join(),
@@ -71,7 +152,6 @@ const AlumnListTable = (props) => {
   };
 
   const handleOnChangePresence = (event) => {
-    debugger;
     const presence = event.target.value;
     onChangeSelectedPresence(presence);
   };
@@ -84,7 +164,6 @@ const AlumnListTable = (props) => {
   };
 
   const handleOnChangeMove = (event) => {
-    debugger;
     const move = event.target.value;
     onChangeSelectedMove(move);
   };
@@ -110,40 +189,6 @@ const AlumnListTable = (props) => {
     props.onChangeFilters({});
   };
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: "NOMBRE",
-        accessor: "name",
-      },
-      {
-        Header: "CIUDAD",
-        accessor: "city",
-      },
-      {
-        Header: "PAIS",
-        accessor: "country",
-      },
-      {
-        Header: "TELEFONO",
-        accessor: "phoneNumber",
-      },
-      {
-        Header: "CORREO ELECTRÓNICO",
-        accessor: "email",
-      },
-      {
-        Header: "ETIQUETAS",
-        accessor: "tags",
-        Cell: (props) => {
-          const tags = props.row.original.tags;
-          return <TagList tags={tags} allowClose={false}></TagList>;
-        },
-      },
-    ],
-    []
-  );
-
   const handleShowModal = () => {
     setShow(true);
   };
@@ -151,12 +196,6 @@ const AlumnListTable = (props) => {
   const handleCloseModal = () => {
     setShow(false);
   };
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data: props.students,
-    });
 
   const headerStyle = {
     display: "inline",
@@ -191,7 +230,7 @@ const AlumnListTable = (props) => {
                 className="form-control"
                 placeholder="Buscar por Nombre, Email o Palabra clave..."
                 value={searchTitle}
-                onChange={onChangeSearchTitle}
+                onChange={handleOnChangeSearchTitle}
                 style={searchInputStyle}
               />
               <button onClick={handleShowModal} style={addAlumnStyle}>
@@ -201,15 +240,26 @@ const AlumnListTable = (props) => {
           </div>
           <table
             id="alumnos"
-            className="table table-striped table-bordered"
+            className="table table-bordered"
             {...getTableProps()}
           >
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th {...column.getHeaderProps()}>
-                      {column.render("Header")}
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      <span
+                        onClick={() => {
+                          if (column.canSort) {
+                            sortColumn(column);
+                          }
+                        }}
+                      >
+                        {column.render("Header")}
+                        {showSortInfo(column)}
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -253,7 +303,6 @@ const AlumnListTable = (props) => {
                   selected={selectedTags}
                   name="available-tags"
                   handleOnChange={(selected) => {
-                    debugger;
                     onChangeSelectedTags(selected);
                   }}
                 />
@@ -278,7 +327,59 @@ const AlumnListTable = (props) => {
                   <option value="AF">Afganistán</option>
                   <option value="AL">Albania</option>
                   <option value="DE">Alemania</option>
+                  <option value="AD">Andorra</option>
+                  <option value="AQ">Antártida</option>
+                  <option value="SA">Arabia Saudí</option>
+                  <option value="DZ">Argelia</option>
+                  <option value="AR">Argentina</option>
+                  <option value="AM">Armenia</option>
+                  <option value="AW">Aruba</option>
+                  <option value="AU">Australia</option>
+                  <option value="AT">Austria</option>
+                  <option value="BO">Bolivia</option>
+                  <option value="BA">Bosnia y Herzegovina</option>
+                  <option value="BW">Botswana</option>
+                  <option value="BR">Brasil</option>
+                  <option value="CA">Canadá</option>
+                  <option value="TD">Chad</option>
+                  <option value="CL">Chile</option>
+                  <option value="CN">China</option>
+                  <option value="CY">Chipre</option>
+                  <option value="VA">Ciudad del Vaticano (Santa Sede)</option>
+                  <option value="CO">Colombia</option>
+                  <option value="CU">Cuba</option>
+                  <option value="DK">Dinamarca</option>
+                  <option value="SI">Eslovenia</option>
                   <option value="ES">España</option>
+                  <option value="US">Estados Unidos</option>
+                  <option value="EE">Estonia</option>
+                  <option value="ET">Etiopía</option>
+                  <option value="FJ">Fiji</option>
+                  <option value="PH">Filipinas</option>
+                  <option value="FI">Finlandia</option>
+                  <option value="FR">Francia</option>
+                  <option value="GA">Gabón</option>
+                  <option value="GM">Gambia</option>
+                  <option value="GE">Georgia</option>
+                  <option value="GH">Ghana</option>
+                  <option value="GI">Gibraltar</option>
+                  <option value="GD">Granada</option>
+                  <option value="GR">Grecia</option>
+                  <option value="HU">Hungría</option>
+                  <option value="IN">India</option>
+                  <option value="IL">Israel</option>
+                  <option value="IT">Italia</option>
+                  <option value="JM">Jamaica</option>
+                  <option value="JP">Japón</option>
+                  <option value="JO">Jordania</option>
+                  <option value="NO">Noruega</option>
+                  <option value="PT">Portugal</option>
+                  <option value="PR">Puerto Rico</option>
+                  <option value="UK">Reino Unido</option>
+                  <option value="RU">Rusia</option>
+                  <option value="SE">Suecia</option>
+                  <option value="CH">Suiza</option>
+                  <option value="VE">Venezuela</option>
                 </select>
               </div>
               <div className="block">
@@ -295,6 +396,54 @@ const AlumnListTable = (props) => {
                   <option value="Albacete">Albacete</option>
                   <option value="Alicante">Alicante</option>
                   <option value="Almería">Almería</option>
+                  <option value="Asturias">Asturias</option>
+                  <option value="Ávila">Ávila</option>
+                  <option value="Badajoz">Badajoz</option>
+                  <option value="Baleares">Baleares</option>
+                  <option value="Barcelona">Barcelona</option>
+                  <option value="Burgos">Burgos</option>
+                  <option value="Cáceres">Cáceres</option>
+                  <option value="Cádiz">Cádiz</option>
+                  <option value="Cantabria">Cantabria</option>
+                  <option value="Castellón">Castellón</option>
+                  <option value="Ceuta">Ceuta</option>
+                  <option value="Ciudad Real">Ciudad Real</option>
+                  <option value="Córdoba">Córdoba</option>
+                  <option value="Cuenca">Cuenca</option>
+                  <option value="Gerona/Girona">Gerona/Girona</option>
+                  <option value="Granada">Granada</option>
+                  <option value="Guadalajara">Guadalajara</option>
+                  <option value="Guipúzcoa/Gipuzkoa">Guipúzcoa/Gipuzkoa</option>
+                  <option value="Huelva">Huelva</option>
+                  <option value="Huesca">Huesca</option>
+                  <option value="Jaén">Jaén</option>
+                  <option value="La Coruña/A Coruña">La Coruña/A Coruña</option>
+                  <option value="La Rioja">La Rioja</option>
+                  <option value="Las Palmas">Las Palmas</option>
+                  <option value="León">León</option>
+                  <option value="Lérida/Lleida">Lérida/Lleida</option>
+                  <option value="Lugo">Lugo</option>
+                  <option value="Madrid">Madrid</option>
+                  <option value="Málaga">Málaga</option>
+                  <option value="Melilla">Melilla</option>
+                  <option value="Murcia">Murcia</option>
+                  <option value="Navarra">Navarra</option>
+                  <option value="Orense/Ourense">Orense/Ourense</option>
+                  <option value="Palencia">Palencia</option>
+                  <option value="Pontevedra">Pontevedra</option>
+                  <option value="Salamanca">Salamanca</option>
+                  <option value="Segovia">Segovia</option>
+                  <option value="Sevilla">Sevilla</option>
+                  <option value="Soria">Soria</option>
+                  <option value="Tarragona">Tarragona</option>
+                  <option value="Tenerife">Tenerife</option>
+                  <option value="Teruel">Teruel</option>
+                  <option value="Toledo">Toledo</option>
+                  <option value="Valencia">Valencia</option>
+                  <option value="Valladolid">Valladolid</option>
+                  <option value="Vizcaya/Bizkaia">Vizcaya/Bizkaia</option>
+                  <option value="Zamora">Zamora</option>
+                  <option value="Zaragoza">Zaragoza</option>n>
                 </select>
               </div>
               <div className="block">

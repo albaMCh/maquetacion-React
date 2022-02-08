@@ -8,7 +8,6 @@ const Alumnitem = ({ row, allowClose, onClickStudentRow }) => {
   const history = useNavigate();
 
   const goToStudentDetail = (row) => {
-    debugger;
     history("/students/" + row.original.id);
   };
 

@@ -36,6 +36,10 @@ table#alumnos tr td:first-child {
   font-weight: bold;
 }
 
+table#alumnos tr:hover {
+  cursor: pointer;
+}
+
 caption,
 td,
 th {

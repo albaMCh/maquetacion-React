@@ -9,19 +9,132 @@ import StudentDataService from "../../services/StudentDataService";
 
 import { AVAILABLE_TAGS } from "../../utils";
 
+import { toast } from "react-toastify";
+
 const AlumnCreateCard = (props) => {
   const [currentAlumn, setCurrentAlumn] = useState({
     tags: "",
+    pdfPath: null,
   });
 
+  const [selectedImage, setSelectedImage] = useState(null);
+
   useEffect(() => {}, []);
+
+  // On file select (from the pop up)
+  const onImageChange = (event) => {
+    // Update the state
+    setSelectedImage(event.target.files[0]);
+  };
+  const onImageUpload = () => {
+    // Create an object of formData
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append(
+      "myImagen", // TODO: Revisar este nombre en la API
+      selectedImage,
+      selectedImage.name
+    );
+
+    // Details of the uploaded file
+    console.log(selectedImage);
+
+    // Request made to the backend api
+    // Send formData object
+    StudentDataService.uploadImage(formData)
+      .then((response) => {
+        // TODO: Revisar nombre parámetro con ruta pdf en API
+        const imagePath = response.data.imagePath;
+        const updatedAlumn = {
+          ...currentAlumn,
+          imagePath,
+        };
+        setCurrentAlumn(updatedAlumn);
+        console.log("Imagen subido correctamente");
+        toast.success("Imagen subido correctamente", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch(() => {
+        debugger;
+        console.log("Fallo al subir imagen");
+      });
+  };
+
+  const [selectedPdf, setSelectedPdf] = useState(null);
+
+  useEffect(() => {}, []);
+
+  // On file select (from the pop up)
+  const onPdfChange = (event) => {
+    // Update the state
+    setSelectedPdf(event.target.files[0]);
+  };
+
+  const onPdfUpload = () => {
+    // Create an object of formData
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append(
+      "myPdf", // TODO: Revisar este nombre en la API
+      selectedPdf,
+      selectedPdf.name
+    );
+
+    // Details of the uploaded file
+    console.log(selectedPdf);
+
+    // Request made to the backend api
+    // Send formData object
+    StudentDataService.uploadCV(formData)
+      .then((response) => {
+        // TODO: Revisar nombre parámetro con ruta pdf en API
+        const pdfPath = response.data.pdfPath;
+        const updatedAlumn = {
+          ...currentAlumn,
+          pdfPath,
+        };
+        setCurrentAlumn(updatedAlumn);
+        console.log("PDF subido correctamente");
+        toast.success("PDF subido correctamente", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch(() => {
+        debugger;
+        console.log("Fallo al subir el PDF");
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    StudentDataService.create(currentAlumn).then(() =>
-      props.handleCloseModal()
-    );
+    StudentDataService.create(currentAlumn).then(() => {
+      props.handleCloseModal();
+      toast.success("Alumno creado correctamente", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
   };
 
   const availableTags = AVAILABLE_TAGS;
@@ -89,6 +202,27 @@ const AlumnCreateCard = (props) => {
     setCurrentAlumn(updatedAlumn);
   };
 
+  const handleOnChangeTag = (event) => {
+    const tags = event.target.value;
+    const updatedAlumn = {
+      ...currentAlumn,
+      tags,
+    };
+    setCurrentAlumn(updatedAlumn);
+    debugger;
+  };
+
+  const renderPdfInfo = () => {
+    if (!selectedPdf) {
+      return (
+        <div>
+          <br />
+          <h4>Choose before Pressing the Upload button</h4>
+        </div>
+      );
+    }
+  };
+
   return (
     <div>
       <section className="form-register">
@@ -146,7 +280,58 @@ const AlumnCreateCard = (props) => {
                   <option value="AL">Albania</option>
                   <option value="DE">Alemania</option>
                   <option value="AD">Andorra</option>
+                  <option value="AQ">Antártida</option>
+                  <option value="SA">Arabia Saudí</option>
+                  <option value="DZ">Argelia</option>
+                  <option value="AR">Argentina</option>
+                  <option value="AM">Armenia</option>
+                  <option value="AW">Aruba</option>
+                  <option value="AU">Australia</option>
+                  <option value="AT">Austria</option>
+                  <option value="BO">Bolivia</option>
+                  <option value="BA">Bosnia y Herzegovina</option>
+                  <option value="BW">Botswana</option>
+                  <option value="BR">Brasil</option>
+                  <option value="CA">Canadá</option>
+                  <option value="TD">Chad</option>
+                  <option value="CL">Chile</option>
+                  <option value="CN">China</option>
+                  <option value="CY">Chipre</option>
+                  <option value="VA">Ciudad del Vaticano (Santa Sede)</option>
+                  <option value="CO">Colombia</option>
+                  <option value="CU">Cuba</option>
+                  <option value="DK">Dinamarca</option>
+                  <option value="SI">Eslovenia</option>
                   <option value="ES">España</option>
+                  <option value="US">Estados Unidos</option>
+                  <option value="EE">Estonia</option>
+                  <option value="ET">Etiopía</option>
+                  <option value="FJ">Fiji</option>
+                  <option value="PH">Filipinas</option>
+                  <option value="FI">Finlandia</option>
+                  <option value="FR">Francia</option>
+                  <option value="GA">Gabón</option>
+                  <option value="GM">Gambia</option>
+                  <option value="GE">Georgia</option>
+                  <option value="GH">Ghana</option>
+                  <option value="GI">Gibraltar</option>
+                  <option value="GD">Granada</option>
+                  <option value="GR">Grecia</option>
+                  <option value="HU">Hungría</option>
+                  <option value="IN">India</option>
+                  <option value="IL">Israel</option>
+                  <option value="IT">Italia</option>
+                  <option value="JM">Jamaica</option>
+                  <option value="JP">Japón</option>
+                  <option value="JO">Jordania</option>
+                  <option value="NO">Noruega</option>
+                  <option value="PT">Portugal</option>
+                  <option value="PR">Puerto Rico</option>
+                  <option value="UK">Reino Unido</option>
+                  <option value="RU">Rusia</option>
+                  <option value="SE">Suecia</option>
+                  <option value="CH">Suiza</option>
+                  <option value="VE">Venezuela</option>
                 </select>
               </div>
 
@@ -233,7 +418,6 @@ const AlumnCreateCard = (props) => {
                   value={currentAlumn.presence}
                   onChange={handleOnChangePresence}
                 >
-                  <option value="">Elige una opción</option>
                   <option value="Presencial">Presencial</option>
                   <option value="En remoto">En remoto</option>
                 </select>
@@ -241,23 +425,37 @@ const AlumnCreateCard = (props) => {
             </div>
             <div className="col-md-6">
               <div className="block full-width">
-                <label htmlFor="Document CV">Foto de perfil</label>
+                <label htmlFor="upload-image">Foto de perfil</label>
+                <input type="file" onChange={onImageChange} />
+                <button
+                  id="upload-cv"
+                  onClick={onImageUpload}
+                  disabled={!selectedImage}
+                ></button>
 
                 <button>
                   <i
-                    className="bi bi-cloud-arrow-down"
+                    className="bi bi-cloud-arrow-up"
                     style={{ fontSize: "20px" }}
                   ></i>
                   Subir imagen
                 </button>
-                <label htmlFor="Document CV">Documento CV</label>
-                <button>
+              </div>
+              <div className="block full-width">
+                <label htmlFor="upload-cv">Documento CV</label>
+                <input type="file" onChange={onPdfChange} />
+                <button
+                  id="upload-cv"
+                  onClick={onPdfUpload}
+                  disabled={!selectedPdf}
+                >
                   <i
-                    className="bi bi-cloud-arrow-down"
+                    className="bi bi-cloud-arrow-up"
                     style={{ fontSize: "20px" }}
                   ></i>
                   Subir documento PDF
                 </button>
+                {renderPdfInfo()}
               </div>
               <div className="full-width">
                 <label htmlFor="tags">Etiquetas</label>
@@ -266,9 +464,7 @@ const AlumnCreateCard = (props) => {
                   options={availableTags}
                   selected={currentAlumn.tags}
                   name="available-tags"
-                  handleOnChange={(selected) => {
-                    debugger;
-                  }}
+                  handleOnChange={handleOnChangeTag}
                 />
               </div>
               {currentAlumn.tags.length > 0 && (
