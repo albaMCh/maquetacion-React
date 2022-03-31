@@ -17,19 +17,19 @@
 }*/
 
 export const AVAILABLE_TAGS = [
-  { key: "angular", label: "Angular" },
-  { key: "hibernate", label: "Hibernate" },
-  { key: "java", label: "java" },
-  { key: "html_css", label: "html&css" },
-  { key: "python", label: "python" },
-  { key: "git", label: "git" },
-  { key: "react", label: "react" },
-  { key: "spring", label: "spring" },
+    {key: "angular", label: "Angular"},
+    {key: "hibernate", label: "Hibernate"},
+    {key: "java", label: "java"},
+    {key: "html_css", label: "html&css"},
+    {key: "python", label: "python"},
+    {key: "git", label: "git"},
+    {key: "react", label: "react"},
+    {key: "spring", label: "spring"},
 ];
 
 //export const API_URL = "http://localhost:9033/api";
 export const API_URL = "https://61f816ed783c1d0017c445c3.mockapi.io/api";
 
 export const getTagObjectFromKey = (key) => {
-  return AVAILABLE_TAGS.find((tag) => tag.key === key);
+    return AVAILABLE_TAGS.find((tag) => tag.key === key);
 };

@@ -1,4 +1,4 @@
 table#alumnos tbody tr td:last-child span.tag {
-  color: white;
-  background-color: #32d4a4;
+    color: white;
+    background-color: #32d4a4;
 }

@@ -1,160 +1,160 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-  color: black;
-  font-size: 12px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    color: black;
+    font-size: 12px;
 }
 
 body {
-  background-color: #e5e5e5 !important;
+    background-color: #e5e5e5 !important;
 }
 
 .card {
-  border: 1px solid #f8f8f9;
-  border-radius: 15px !important;
-  padding: 30px;
-  margin-top: 100px;
-  background: #fff;
-  width: auto;
-  margin: 15px;
-  /* overflow: hidden; */
+    border: 1px solid #f8f8f9;
+    border-radius: 15px !important;
+    padding: 30px;
+    margin-top: 100px;
+    background: #fff;
+    width: auto;
+    margin: 15px;
+    /* overflow: hidden; */
 }
 
 @media (min-width: 992px) {
-  .card {
-    width: 500px;
-  }
+    .card {
+        width: 500px;
+    }
 }
 
 #principal {
-  margin-bottom: 30px;
-  /* overflow: hidden; */
+    margin-bottom: 30px;
+    /* overflow: hidden; */
 }
 
 #principal img#user-image {
-  border-radius: 30px;
-  width: 100px;
-  border: 7px solid #e6e6ea;
-  margin-right: 10px;
+    border-radius: 30px;
+    width: 100px;
+    border: 7px solid #e6e6ea;
+    margin-right: 10px;
 }
 
 #principal #location img {
-  margin: 0 5px;
+    margin: 0 5px;
 }
 
 @media (min-width: 992px) {
-  #principal img#user-image {
-    width: 100px;
-  }
+    #principal img#user-image {
+        width: 100px;
+    }
 }
 
 #principal #user-info {
-  padding: 15px;
+    padding: 15px;
 }
 
 #principal #user-info h3 {
-  color: #5f5f5f;
+    color: #5f5f5f;
 }
 
 .form-register {
-  width: 100%;
+    width: 100%;
 
-  font-family: sans-serif;
+    font-family: sans-serif;
 }
 
 @media (min-width: 992px) {
-  .form-register {
-    width: 400px;
-  }
+    .form-register {
+        width: 400px;
+    }
 }
 
 .form-register .block {
-  width: 100%;
+    width: 100%;
 }
 
 .form-register .block:not(:last-child) {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .form-register .block label {
-  margin-bottom: 7px;
+    margin-bottom: 7px;
 }
 
 .form-register .block label,
 .form-register .block input,
 .form-register .block select {
-  width: 100%;
-  display: block;
+    width: 100%;
+    display: block;
 }
 
 .form-register .block input,
 .form-register .block select {
-  border-radius: 4px;
-  height: 40px;
-  background-color: #f8f8f9;
-  padding: 0 10px;
-  border: 1px solid #f8f8f9;
+    border-radius: 4px;
+    height: 40px;
+    background-color: #f8f8f9;
+    padding: 0 10px;
+    border: 1px solid #f8f8f9;
 }
 
 .form-register .block input.select2-search__field {
-  height: 30px;
+    height: 30px;
 }
 
 .form-register .block button {
-  padding: 5px 5px;
-  border-radius: 4px;
-  border: 1px solid #f8f8f9;
+    padding: 5px 5px;
+    border-radius: 4px;
+    border: 1px solid #f8f8f9;
 }
 
 .form-register .block button:hover {
-  background-color: gray;
+    background-color: gray;
 }
 
 .form-register .block button img {
-  vertical-align: text-bottom;
+    vertical-align: text-bottom;
 }
 
 @media (min-width: 992px) {
-  .form-register .block:not(:first-child) {
-    width: 50%;
-    float: left;
-  }
+    .form-register .block:not(:first-child) {
+        width: 50%;
+        float: left;
+    }
 
-  .form-register .block.full-width {
-    width: 100%;
-  }
+    .form-register .block.full-width {
+        width: 100%;
+    }
 
-  .form-register .block:nth-child(2n) {
-    padding-right: 15px;
-  }
+    .form-register .block:nth-child(2n) {
+        padding-right: 15px;
+    }
 
-  .form-register .block:not(:first-child):nth-child(2n + 1) {
-    padding-left: 15px;
-  }
+    .form-register .block:not(:first-child):nth-child(2n + 1) {
+        padding-left: 15px;
+    }
 
-  .form-register .block:last-child {
-    padding-left: 0 !important;
-  }
+    .form-register .block:last-child {
+        padding-left: 0 !important;
+    }
 }
 
 /* select2 styles */
 
 .select2-container--default
-  .select2-selection--multiple
-  .select2-selection__choice {
-  border-radius: 15px;
-  padding: 5px;
+.select2-selection--multiple
+.select2-selection__choice {
+    border-radius: 15px;
+    padding: 5px;
 }
 
 .select2-container--default
-  .select2-selection--multiple
-  .select2-selection__choice__remove {
-  float: right;
-  margin-left: 2px;
+.select2-selection--multiple
+.select2-selection__choice__remove {
+    float: right;
+    margin-left: 2px;
 }
 
 #tag-list {
-  margin-top: 20px;
+    margin-top: 20px;
 }
